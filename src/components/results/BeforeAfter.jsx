@@ -1,4 +1,4 @@
-import { Sparkles, ArrowRight } from "lucide-react"
+import { Sparkles } from "lucide-react"
 import { useSession } from "../../hooks/useSession"
 import { Card } from "../ui/Card"
 import { Badge } from "../ui/Badge"
