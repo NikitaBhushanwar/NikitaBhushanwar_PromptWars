@@ -184,13 +184,37 @@ export const analysisService = {
   },
 
   /**
-   * Phase 2 Hook:
-   * Will call the backend /api/analyze endpoint with Gemini API.
+   * Phase 2 Live Gemini Integration:
+   * Calls the secure /api/analyze endpoint with decision data and user profile.
    */
-  async executeLiveGeminiAudit(_decisionData, _userProfile) {
-    throw new Error(
-      "Live Gemini AI integration is scheduled for Phase 2. " +
-      "The current UI is running on the Phase 1 schema-compliant shell."
-    )
+  async executeLiveGeminiAudit(decisionData, userProfile) {
+    const response = await fetch("/api/analyze", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        userProfile,
+        decisionData
+      })
+    })
+
+    if (!response.ok) {
+      let errorMessage = "Unable to complete the analysis right now. Please try again."
+      try {
+        const errorData = await response.json()
+        if (errorData.error) {
+          errorMessage = errorData.error
+        }
+      } catch {
+        // use default error message
+      }
+      const error = new Error(errorMessage)
+      error.status = response.status
+      throw error
+    }
+
+    const data = await response.json()
+    return data
   }
 }

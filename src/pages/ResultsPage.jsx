@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Sparkles } from "lucide-react"
 import { useSession } from "../hooks/useSession"
 import { Container } from "../components/common/Container"
 import { Button } from "../components/ui/Button"
@@ -25,14 +25,31 @@ import { ReversibilitySection } from "../components/results/ReversibilitySection
 import { TimelineSection } from "../components/results/TimelineSection"
 import { BlindSpotMap } from "../components/visuals/BlindSpotMap"
 import { ConsiderationsSummary } from "../components/results/ConsiderationsSummary"
+import { ReflectionQuestions } from "../components/results/ReflectionQuestions"
 import { BeforeAfter } from "../components/results/BeforeAfter"
 
 export function ResultsPage() {
   const { analysis, decisionData, userProfile } = useSession()
 
-  // If no analysis is loaded, safely generate the schema-compliant shell audit from current decisionData
+  // If no analysis is loaded in session, safely provide the structured shell from current decisionData
   const activeAudit =
     analysis || analysisService.generateShellAudit(decisionData, userProfile)
+
+  // Epistemic breakdown derivation
+  const knownItems = (activeAudit.knownAssumedUnknown?.known?.length > 0)
+    ? activeAudit.knownAssumedUnknown.known
+    : (activeAudit.facts || []).map(f => typeof f === "string" ? f : f.statement || "")
+
+  const assumedItems = (activeAudit.knownAssumedUnknown?.assumed?.length > 0)
+    ? activeAudit.knownAssumedUnknown.assumed
+    : (activeAudit.assumptions || []).map(a => typeof a === "string" ? a : a.assumption || "")
+
+  const unknownItems = (activeAudit.knownAssumedUnknown?.unknown?.length > 0)
+    ? activeAudit.knownAssumedUnknown.unknown
+    : (activeAudit.information_gaps || []).map(g => typeof g === "string" ? g : g.missing_information || g.missingInfo || "")
+
+  // Check if live analysis was generated
+  const isLiveAudit = Boolean(analysis && !analysis._isFallback)
 
   return (
     <div className="py-8 sm:py-12 space-y-10 sm:space-y-14">
@@ -43,8 +60,9 @@ export function ResultsPage() {
             <Badge variant="amber" size="sm">
               Decision Audit
             </Badge>
-            <span className="text-xs text-[#9A9EAA] font-mono">
-              Ready for Phase 2 Gemini Injection
+            <span className="text-xs text-[#9A9EAA] font-mono flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-[#63D5E8]" />
+              {isLiveAudit ? "Google Gemini Reasoning Engine" : "Structured Decision Shell"}
             </span>
           </div>
 
@@ -65,20 +83,20 @@ export function ResultsPage() {
         {/* 1. Analysis Overview */}
         <div className="mt-8">
           <AnalysisOverview
-            decisionTitle={decisionData.title || "Your Career & Direction Inflection Point"}
-            summary={activeAudit.summary}
-            isShellPreview={true}
+            decisionTitle={decisionData.title || "Your Decision Under Review"}
+            summary={activeAudit.summary || activeAudit.what_we_heard || activeAudit.whatWeHeard}
+            isShellPreview={!isLiveAudit}
           />
         </div>
 
         <div className="space-y-8 mt-8">
           {/* 2. What We Heard */}
           <WhatWeHeard
-            context={decisionData.detailedContext || activeAudit.whatWeHeard}
+            context={activeAudit.what_we_heard || activeAudit.whatWeHeard || decisionData.detailedContext}
             options={decisionData.options}
             currentLeaning={decisionData.currentLeaning}
             confidence={decisionData.confidence}
-            priorities={activeAudit.priorities}
+            priorities={activeAudit.priorities || decisionData.factors || []}
           />
 
           {/* 3. Facts */}
@@ -92,36 +110,49 @@ export function ResultsPage() {
 
           {/* 5. Known / Assumed / Unknown */}
           <KnownAssumedUnknown
-            known={activeAudit.knownAssumedUnknown?.known || []}
-            assumed={activeAudit.knownAssumedUnknown?.assumed || []}
-            unknown={activeAudit.knownAssumedUnknown?.unknown || []}
+            known={knownItems}
+            assumed={assumedItems}
+            unknown={unknownItems}
           />
 
-          {/* 17. Blind Spot Map */}
+          {/* 15. Blind Spot Map */}
           <BlindSpotMap
             decisionTitle={decisionData.title || "Core Decision"}
+            reasoningMap={activeAudit.reasoning_map || activeAudit.reasoningMap}
             visibleFactors={activeAudit.priorities || ["Money", "Career", "Learning", "Time"]}
           />
 
-          {/* 7. Potential Blind Spots */}
-          <BlindSpotsSection blindSpots={activeAudit.blindSpots || []} />
+          {/* 5. Potential Blind Spots */}
+          <BlindSpotsSection
+            blindSpots={activeAudit.potential_blind_spots || activeAudit.blindSpots || []}
+          />
 
-          {/* 6. Underlying Assumptions */}
-          <AssumptionsSection assumptions={activeAudit.assumptions || []} />
+          {/* 4. Underlying Assumptions */}
+          <AssumptionsSection
+            assumptions={activeAudit.assumptions || []}
+          />
 
-          {/* 8. Overlooked Factors */}
-          <OverlookedFactors factors={activeAudit.overlookedFactors || []} />
+          {/* 6. Overlooked Factors */}
+          <OverlookedFactors
+            factors={activeAudit.overlooked_factors || activeAudit.overlookedFactors || []}
+          />
 
-          {/* 9. Reasoning Tensions */}
-          <ReasoningTensions tensions={activeAudit.reasoningTensions || []} />
+          {/* 7. Reasoning Tensions */}
+          <ReasoningTensions
+            tensions={activeAudit.reasoning_tensions || activeAudit.reasoningTensions || []}
+          />
 
-          {/* 10. Information Gaps */}
-          <InformationGaps gaps={activeAudit.informationGaps || []} />
+          {/* 8. Information Gaps */}
+          <InformationGaps
+            gaps={activeAudit.information_gaps || activeAudit.informationGaps || []}
+          />
 
-          {/* 11. Alternative Perspectives */}
-          <PerspectivesSection perspectives={activeAudit.perspectives || []} />
+          {/* 9. Alternative Perspectives */}
+          <PerspectivesSection
+            perspectives={activeAudit.alternative_perspectives || activeAudit.perspectives || []}
+          />
 
-          {/* 12. Challenge My Reasoning CTA Banner */}
+          {/* 10. Challenge My Reasoning CTA Banner */}
           <Card variant="highlight" padding="lg" className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="space-y-2 text-center sm:text-left">
               <span className="text-[10px] font-mono uppercase tracking-wider text-[#A599FF]">
@@ -141,25 +172,40 @@ export function ResultsPage() {
             </Link>
           </Card>
 
-          {/* 13. What Would Change Your Mind? */}
-          <WhatWouldChangeYourMind conditions={activeAudit.whatWouldChangeMyMind || []} />
+          {/* 11. What Would Change Your Mind? */}
+          <WhatWouldChangeYourMind
+            conditions={activeAudit.what_would_change_your_mind || activeAudit.whatWouldChangeMyMind || []}
+          />
 
-          {/* 14. Pre-Mortem */}
-          <PremortemSection premortem={activeAudit.preMortem} />
+          {/* 12. Pre-Mortem */}
+          <PremortemSection
+            premortem={activeAudit.pre_mortem || activeAudit.preMortem}
+          />
 
-          {/* 15. Reversibility */}
-          <ReversibilitySection reversibility={activeAudit.reversibility} />
+          {/* 13. Reversibility */}
+          <ReversibilitySection
+            reversibility={activeAudit.reversibility}
+          />
 
-          {/* 16. Timeline / Future Lens */}
-          <TimelineSection timeline={activeAudit.timeline} />
+          {/* 14. Timeline / Future Lens */}
+          <TimelineSection
+            timeline={activeAudit.timeline}
+          />
 
-          {/* 18. What to Consider */}
-          <ConsiderationsSummary considerations={activeAudit.considerations || []} />
+          {/* 16. What to Consider */}
+          <ConsiderationsSummary
+            considerations={activeAudit.what_to_consider || activeAudit.considerations || []}
+          />
 
-          {/* 21. Before vs After */}
+          {/* 17. Reflection Questions */}
+          <ReflectionQuestions
+            questions={activeAudit.reflection_questions || activeAudit.reflectionQuestions || []}
+          />
+
+          {/* Before vs After */}
           <BeforeAfter />
 
-          {/* 22. You Decide Banner (Core Philosophy) */}
+          {/* Sovereign Principle / You Decide Banner */}
           <Card variant="default" padding="lg" className="text-center space-y-4 border-[#7C6CF5]/30">
             <span className="text-xs font-mono uppercase tracking-widest text-[#E8B86A]">
               Human Sovereignty

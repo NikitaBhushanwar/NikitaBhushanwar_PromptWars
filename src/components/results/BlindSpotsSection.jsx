@@ -43,6 +43,13 @@ export function BlindSpotsSection({ blindSpots = [] }) {
               <p className="text-xs text-[#9A9EAA] mt-2 leading-relaxed">
                 {bs.description}
               </p>
+
+              {bs.why_it_matters && (
+                <div className="mt-3 p-2.5 rounded bg-[#161922] border border-[#262A34] text-[11px] text-[#9A9EAA]">
+                  <strong className="text-[#E8B86A] font-mono uppercase text-[10px] block mb-0.5">Why this matters:</strong>
+                  {bs.why_it_matters}
+                </div>
+              )}
             </div>
 
             {/* Question to explore */}
@@ -52,7 +59,7 @@ export function BlindSpotsSection({ blindSpots = [] }) {
                 Question Worth Exploring
               </span>
               <p className="text-xs text-[#F4F5F7] font-medium italic">
-                "{bs.questionToExplore}"
+                "{bs.question || bs.questionToExplore}"
               </p>
             </div>
           </div>

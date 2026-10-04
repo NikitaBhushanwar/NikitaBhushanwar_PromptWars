@@ -20,22 +20,35 @@ export function ReversibilitySection({ reversibility }) {
           </div>
         </div>
         <Badge variant="cyan" size="sm">
-          {reversibility.reversibilityType || "Two-Way Door"}
+          {reversibility.reversibilityType || "Decision Architecture"}
         </Badge>
       </div>
 
-      <div className="p-4 rounded-xl bg-[#161922] border border-[#262A34] space-y-2.5 text-xs sm:text-sm">
-        <div className="flex items-center justify-between">
-          <span className="font-semibold text-[#F4F5F7]">
-            Classification: {reversibility.reversibilityType}
+      <div className="p-4 rounded-xl bg-[#161922] border border-[#262A34] space-y-3 text-xs sm:text-sm">
+        <div>
+          <span className="text-[10px] font-mono uppercase tracking-wider text-[#63D5E8] block mb-1">
+            Reversibility Assessment
           </span>
-          <span className="text-[11px] font-mono text-[#63D5E8]">
-            {reversibility.isReversible ? "Reversible with deliberate effort" : "Irreversible lock-in"}
-          </span>
+          <p className="text-xs sm:text-sm text-[#F4F5F7] leading-relaxed">
+            {reversibility.assessment || reversibility.costOfReversal}
+          </p>
         </div>
-        <p className="text-xs text-[#9A9EAA] leading-relaxed">
-          <strong className="text-[#F4F5F7]">Cost & Friction of Reversal:</strong> {reversibility.costOfReversal}
-        </p>
+
+        {reversibility.considerations && reversibility.considerations.length > 0 && (
+          <div className="pt-2 border-t border-[#262A34]/60">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-[#9A9EAA] block mb-2">
+              Key Exit Friction Considerations
+            </span>
+            <ul className="space-y-1.5 text-xs text-[#9A9EAA]">
+              {reversibility.considerations.map((item, idx) => (
+                <li key={idx} className="flex items-start gap-2">
+                  <span className="text-[#63D5E8] font-mono">→</span>
+                  <span className="leading-relaxed">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </Card>
   )

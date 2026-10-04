@@ -7,12 +7,11 @@
 
 ---
 
-## Phase 1 Overview
+## Implementation Progress
 
-This repository represents **PHASE 1** of a 4-phase implementation:
 - **Phase 1 (Completed)**: Clean production-quality React/Vite architecture, design system, full user journey UI shells, session state persistence, responsive layouts, accessibility foundations, and Zod data contracts.
-- **Phase 2 (Scheduled)**: Integration with Google Gemini reasoning models (`gemini-1.5-pro` / `gemini-2.0-flash`) via structured JSON schemas.
-- **Phase 3**: Multi-turn dialogue, counterfactual simulations, and interactive challenge synthesis.
+- **Phase 2 (Completed)**: Secure server-side Vercel serverless integration (`POST /api/analyze`) calling the Google Gemini reasoning engine (`@google/genai`), strict Zod input/output validation, non-directive system prompt calibration, complete Results UI wiring, and robust error/retry handling.
+- **Phase 3 (Scheduled)**: Multi-turn dialogue, counterfactual simulations, and interactive challenge synthesis.
 - **Phase 4**: Exportable decision briefs, longitudinal reflection tracking, and collaborative audits.
 
 ---

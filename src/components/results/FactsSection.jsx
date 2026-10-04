@@ -23,22 +23,24 @@ export function FactsSection({ facts = [] }) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-        {facts.map((fact) => (
-          <div
-            key={fact.id}
-            className="p-3.5 rounded-xl bg-[#161922] border border-[#262A34] flex flex-col justify-between"
-          >
-            <p className="text-xs text-[#F4F5F7] leading-relaxed">
-              {fact.statement}
-            </p>
-            {fact.source && (
+        {facts.map((fact, idx) => {
+          const statement = typeof fact === "string" ? fact : (fact.statement || "")
+          const source = typeof fact === "object" && fact.source ? fact.source : "Empirical report"
+          return (
+            <div
+              key={idx}
+              className="p-3.5 rounded-xl bg-[#161922] border border-[#262A34] flex flex-col justify-between"
+            >
+              <p className="text-xs text-[#F4F5F7] leading-relaxed">
+                {statement}
+              </p>
               <div className="pt-2 mt-2 border-t border-[#262A34]/60 flex items-center gap-1.5 text-[10px] font-mono text-[#9A9EAA]">
                 <Shield className="w-3 h-3 text-[#63D5E8]" />
-                <span>Source: {fact.source}</span>
+                <span>Source: {source}</span>
               </div>
-            )}
-          </div>
-        ))}
+            </div>
+          )
+        })}
       </div>
     </Card>
   )

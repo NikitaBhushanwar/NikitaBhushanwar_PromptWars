@@ -17,7 +17,7 @@ export function KnownAssumedUnknown({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* KNOWN Column */}
+        {/* FACT (KNOWN) Column */}
         <div className="p-4 rounded-xl bg-[#161922] border border-emerald-500/20 flex flex-col">
           <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#262A34]">
             <div className="flex items-center gap-2">
@@ -25,7 +25,7 @@ export function KnownAssumedUnknown({
                 ✓
               </span>
               <span className="text-xs font-bold tracking-wider uppercase text-emerald-400">
-                Known
+                FACT
               </span>
             </div>
             <span className="text-[10px] font-mono text-[#9A9EAA]">Empirical / Verified</span>
@@ -41,7 +41,7 @@ export function KnownAssumedUnknown({
           </ul>
         </div>
 
-        {/* ASSUMED Column */}
+        {/* ASSUMPTION Column */}
         <div className="p-4 rounded-xl bg-[#161922] border border-[#7C6CF5]/30 flex flex-col">
           <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#262A34]">
             <div className="flex items-center gap-2">
@@ -49,10 +49,10 @@ export function KnownAssumedUnknown({
                 ~
               </span>
               <span className="text-xs font-bold tracking-wider uppercase text-[#A599FF]">
-                Assumed
+                ASSUMPTION
               </span>
             </div>
-            <span className="text-[10px] font-mono text-[#9A9EAA]">Premises to Test</span>
+            <span className="text-[10px] font-mono text-[#9A9EAA]">Unverified Premise</span>
           </div>
 
           <ul className="space-y-2.5 text-xs text-[#F4F5F7] flex-1">
@@ -73,10 +73,10 @@ export function KnownAssumedUnknown({
                 ?
               </span>
               <span className="text-xs font-bold tracking-wider uppercase text-[#E8B86A]">
-                Unknown
+                UNKNOWN
               </span>
             </div>
-            <span className="text-[10px] font-mono text-[#9A9EAA]">Information Gaps</span>
+            <span className="text-[10px] font-mono text-[#9A9EAA]">Information Gap</span>
           </div>
 
           <ul className="space-y-2.5 text-xs text-[#F4F5F7] flex-1">

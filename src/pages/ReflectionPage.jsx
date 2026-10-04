@@ -7,6 +7,7 @@ import { PageHeader } from "../components/common/PageHeader"
 import { Card } from "../components/ui/Card"
 import { Button } from "../components/ui/Button"
 import { Textarea } from "../components/ui/Textarea"
+import { BeforeAfter } from "../components/results/BeforeAfter"
 
 export function ReflectionPage() {
   const navigate = useNavigate()
@@ -85,8 +86,9 @@ ${notes || "None"}
         <div className="space-y-6 mt-6">
           {/* Main reflection inputs */}
           <Card variant="default" padding="lg" className="space-y-6">
+            {/* Question 1 */}
             <Textarea
-              label="What is one thing you hadn't considered before this audit?"
+              label="What is one thing you hadn't considered?"
               placeholder="e.g. I hadn't factored in the mentorship deficit or the exit friction if I need to reverse this in 18 months..."
               rows={3}
               value={unconsideredAspect}
@@ -98,10 +100,10 @@ ${notes || "None"}
               helperText="Identify the single most impactful blind spot or tension surfaced."
             />
 
-            {/* Thinking Changed Options */}
+            {/* Question 2 */}
             <div className="space-y-2">
               <label className="text-xs font-medium uppercase tracking-wider text-[#9A9EAA] block">
-                Has your thinking changed?
+                Did anything change how you see the decision?
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {changeOptions.map((opt) => (
@@ -124,8 +126,9 @@ ${notes || "None"}
               </div>
             </div>
 
+            {/* Question 3 */}
             <Textarea
-              label="What do you want to investigate next before committing?"
+              label="What would you investigate next?"
               placeholder="e.g. Schedule a 15-minute candid conversation with an ex-employee, verify exact vesting schedules..."
               rows={3}
               value={investigateNext}
@@ -133,7 +136,7 @@ ${notes || "None"}
                 setInvestigateNext(e.target.value)
                 handleSave()
               }}
-              helperText="Actionable next steps to eliminate remaining information gaps."
+              helperText="Actionable next steps to eliminate remaining information gaps before committing."
             />
 
             <Textarea
@@ -147,6 +150,9 @@ ${notes || "None"}
               }}
             />
           </Card>
+
+          {/* BEFORE -> AFTER Dynamic Reasoning Reflection */}
+          <BeforeAfter />
 
           {/* Core Philosophy Climax Card */}
           <div className="rounded-2xl bg-gradient-to-b from-[#161922] to-[#101218] border border-[#E8B86A]/40 p-8 sm:p-10 text-center space-y-4 shadow-xl">

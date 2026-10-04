@@ -24,22 +24,39 @@ export function InformationGaps({ gaps = [] }) {
         {gaps.map((item, idx) => (
           <div
             key={item.id || idx}
-            className="p-4 rounded-xl bg-[#161922] border border-[#262A34] flex flex-col md:flex-row md:items-center justify-between gap-4"
+            className="p-4 rounded-xl bg-[#161922] border border-[#262A34] space-y-2.5"
           >
-            <div className="space-y-1 flex-1">
+            <div className="space-y-1">
               <span className="text-[10px] font-mono uppercase text-[#63D5E8] block">
-                Missing Information
+                Missing Information #{idx + 1}
               </span>
-              <p className="text-xs sm:text-sm text-[#F4F5F7] font-medium leading-relaxed">
-                {item.missingInfo}
+              <p className="text-xs sm:text-sm text-[#F4F5F7] font-semibold leading-relaxed">
+                {item.missing_information || item.missingInfo}
               </p>
             </div>
 
-            <div className="md:w-80 bg-[#101218] p-3 rounded-lg border border-[#262A34] text-xs text-[#9A9EAA] shrink-0">
-              <span className="text-[10px] font-mono uppercase text-[#A599FF] block mb-1">
-                Investigation Vector
-              </span>
-              <span className="text-[11px] leading-relaxed block">{item.howToFindOut}</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+              {item.why_it_matters && (
+                <div className="bg-[#101218] p-3 rounded-lg border border-[#262A34] text-xs text-[#9A9EAA]">
+                  <span className="text-[10px] font-mono uppercase text-[#E8B86A] block mb-0.5">
+                    Why It Matters
+                  </span>
+                  <span className="text-[11px] leading-relaxed block text-[#F4F5F7]/90">
+                    {item.why_it_matters}
+                  </span>
+                </div>
+              )}
+
+              {(item.question || item.howToFindOut) && (
+                <div className="bg-[#101218] p-3 rounded-lg border border-[#262A34] text-xs text-[#9A9EAA]">
+                  <span className="text-[10px] font-mono uppercase text-[#63D5E8] block mb-0.5">
+                    {item.question ? "Discovery Question" : "Investigation Vector"}
+                  </span>
+                  <span className="text-[11px] leading-relaxed block text-[#F4F5F7]/90">
+                    {item.question || item.howToFindOut}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         ))}

@@ -21,24 +21,30 @@ export function PerspectivesSection({ perspectives = [] }) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {perspectives.map((p, idx) => (
-          <div
-            key={p.id || idx}
-            className="p-4 rounded-xl bg-[#161922] border border-[#262A34] flex flex-col justify-between"
-          >
-            <div>
-              <span className="text-[10px] font-mono uppercase tracking-wider text-[#A599FF] bg-[#7C6CF5]/10 px-2 py-0.5 rounded border border-[#7C6CF5]/20">
-                Lens: {p.viewpoint}
-              </span>
-              <p className="text-xs sm:text-sm text-[#F4F5F7] mt-3 leading-relaxed">
-                "{p.critiqueOrAngle}"
-              </p>
+        {perspectives.map((p, idx) => {
+          const viewpointTitle = p.viewpoint || `Perspective #${idx + 1}`
+          const mainText = p.perspective || p.critiqueOrAngle || ""
+          return (
+            <div
+              key={p.id || idx}
+              className="p-4 rounded-xl bg-[#161922] border border-[#262A34] flex flex-col justify-between"
+            >
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-[#A599FF] bg-[#7C6CF5]/10 px-2 py-0.5 rounded border border-[#7C6CF5]/20">
+                  Lens: {viewpointTitle}
+                </span>
+                <p className="text-xs sm:text-sm text-[#F4F5F7] mt-3 leading-relaxed">
+                  "{mainText}"
+                </p>
+              </div>
+              {p.question && (
+                <div className="mt-4 pt-2.5 text-xs text-[#63D5E8] italic border-t border-[#262A34]/50">
+                  Question: "{p.question}"
+                </div>
+              )}
             </div>
-            <div className="mt-4 pt-2 text-[10px] text-[#9A9EAA] font-mono border-t border-[#262A34]/50">
-              Observer Archetype Analysis
-            </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </Card>
   )

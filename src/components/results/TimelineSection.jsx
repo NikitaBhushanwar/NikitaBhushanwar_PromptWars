@@ -5,11 +5,17 @@ import { Badge } from "../ui/Badge"
 export function TimelineSection({ timeline }) {
   if (!timeline) return null
 
-  const intervals = [
-    { label: "10 Days", desc: timeline.tenDays, tag: "Immediate Friction" },
-    { label: "10 Months", desc: timeline.tenMonths, tag: "Competence & Culture" },
-    { label: "10 Years", desc: timeline.tenYears, tag: "Compounding Impact" }
-  ]
+  const intervals = Array.isArray(timeline)
+    ? timeline.map((item) => ({
+        label: item.timeframe,
+        desc: item.consideration,
+        tag: "Temporal Horizon"
+      }))
+    : [
+        { label: "10 Days", desc: timeline.tenDays, tag: "Immediate Friction" },
+        { label: "10 Months", desc: timeline.tenMonths, tag: "Competence & Culture" },
+        { label: "10 Years", desc: timeline.tenYears, tag: "Compounding Impact" }
+      ]
 
   return (
     <Card variant="default" padding="md" className="space-y-4">
